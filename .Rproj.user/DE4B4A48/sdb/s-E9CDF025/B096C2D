@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "Package: Miso\nType: Package\nTitle: Multi-isotope Labeling for Metabolomics Analysis\nVersion: 0.1.0\nAuthor: Yonghui Dong\nMaintainer: Yonghui Dong <yonghui.dong@gmail.com>\nDescription: Fishing out isotipically labeled analytes\nLicense: MIT\nEncoding: UTF-8\nLazyData: true\n",
+    "created" : 1495133774293.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1711152073",
+    "id" : "B096C2D",
+    "lastKnownWriteTime" : 1495133868,
+    "last_content_update" : 1495133868935,
+    "path" : "~/Dropbox/Github/Miso/DESCRIPTION",
+    "project_path" : "DESCRIPTION",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "dcf"
+}
