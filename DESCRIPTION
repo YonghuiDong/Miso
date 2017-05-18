@@ -5,6 +5,7 @@ Version: 0.1.0
 Author: Yonghui Dong
 Maintainer: Yonghui Dong <yonghui.dong@gmail.com>
 Description: Fishing out isotipically labeled analytes
+Imports: S4Vectors
 License: MIT
 Encoding: UTF-8
 LazyData: true
