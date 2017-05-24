@@ -1,15 +1,11 @@
-#' isotope differences, can be extended according to the feeding precusors
-#' @return labeled isotope atoms
-iso_DB <- function(){
-  iso_DB <- c(H2 = (2.014102 - 1.007825),
-              C13 = (13.003355 - 12),
-              N15 = (15.000109 - 14.003074),
-              O18 = (17.999160 - 15.994915),
-              S34 = (33.967867 - 31.972071),
-              0
-              )
-  return(iso_DB)
-}
+# iso data base
+H2 = (2.014102 - 1.007825)
+C13 = (13.003355 - 12)
+N15 = (15.000109 - 14.003074)
+O18 = (17.999160 - 15.994915)
+S34 = (33.967867 - 31.972071)
+iso_DB <- c(0, H2, C13, N15, O18, S34)
+
 
 #' Filtering isotopically labeled analytes according to RT and mass differences
 #' @param iso1 the first labled atom in precusor ion
