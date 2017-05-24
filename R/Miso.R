@@ -1,24 +1,16 @@
-# Hello, world!
-#
-# This is an example function named 'hello'
-# which prints 'Hello, world!'.
-#
-# You can learn more about package authoring with RStudio at:
-#
-#   http://r-pkgs.had.co.nz/
-#
-# Some useful keyboard shortcuts for package authoring:
-#
-#   Build and Reload Package:  'Cmd + Shift + B'
-#   Check Package:             'Cmd + Shift + E'
-#   Test Package:              'Cmd + Shift + T'
-
+#' @title
+#' @description
+#' @param
+#' @importFrom S4Vectors
+#' @export
 
 
 # isotope differences, can be extended according to the feeding precusors
 H2 = (2.014102 - 1.007825)
 C13 = (13.003355 - 12)
 N15 = (15.000109 - 14.003074)
+O18 = (17.999160 - 15.994915)
+S34 = (33.967867 - 31.972071)
 
 # dependency checking, and install required packges if needed
 if(!require(S4Vectors)) {
