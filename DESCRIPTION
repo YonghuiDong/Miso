@@ -1,10 +1,10 @@
 Package: Miso
 Type: Package
 Title: Multi-isotope Labeling for Metabolomics Analysis
-Version: 0.1.0
+Version: 1.0
 Author: Yonghui Dong
 Maintainer: Yonghui Dong <yonghui.dong@gmail.com>
-Description: Fishing out isotipically labeled analytes
+Description: Fishing out isotipically labeled analytes for D(M)LEMMA experiment
 License: MIT+
 Encoding: UTF-8
 LazyData: true
