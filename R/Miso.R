@@ -103,9 +103,9 @@ fResult <- function(iso.C, iso.D) {
                    Dmz = iso.D$iso1.mz[p[,2]],
                    Drt= iso.D$iso1.rt[p[,2]],
                    D_charge = iso.D$charge[p[,2]])
-  return(fResult)
   fResult <- fResult[!duplicated(fResult),]
   write.csv(fResult,'full_result.csv')
+  return(fResult)
 }
 
 
