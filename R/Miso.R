@@ -21,7 +21,7 @@ iso_DB <- c(0, H2, C13, N15, O18, S34)
 #' @return results containing unlabled and their corresponding labled analytes, with their RT and labeling information
 
 dual.iso <- function(iso1, n11, n12,  iso2 = 0, n21 = 0, n22 = 0, exp.base,
-                     exp.iso, ppm = 100, rt.dif = 0.2) {
+                     exp.iso, ppm = 30, rt.dif = 0.4) {
   # check the input variables
   if (!is.element(iso1, iso_DB)) {
     stop('The labeled atom "iso1" does not exist. The atom letter should be capitalized')
