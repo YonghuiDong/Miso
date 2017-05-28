@@ -7,6 +7,9 @@ Miso: Multi-isotope Labeling for Metabolomics Analysis
 
 
 ## Usage
+
+Example 
+
 ```r 
 devtools::install_github("YonghuiDong/Miso") 
 rm(list = ls())
@@ -26,7 +29,7 @@ exp.B <- cbind.data.frame(mz = mydataB$mz, RT = mydataB$rt)
 exp.C <- cbind.data.frame(mz = mydataC$mz, RT = mydataC$rt)
 exp.D <- cbind.data.frame(mz = mydataD$mz, RT = mydataD$rt)
 
-## 2ed filtering, according to interested labeling pattern
+## 2ed filtering, according to the labeling patterns of interest
 
 ## group C was fed with H
 iso.C <- dual.iso(iso1 = H2, n11 = 5, n12 = 3, exp.base = exp.B, 
