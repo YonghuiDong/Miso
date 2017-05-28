@@ -51,7 +51,7 @@ reduced_Result <- rResult(full_Result)
 
 `Error: memory exhausted (limit reached?), Error during wrapup: memory exhausted (limit reached?)` 
 
-This error due to the following script:
+This error is due to the following script:
 
 ```r
 ## In group C, we are looking for analytes labeled with 5, 4, or 3 deuterium (H2).
