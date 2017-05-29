@@ -33,7 +33,7 @@ exp.D <- cbind.data.frame(mz = mydataD$mz, RT = mydataD$rt)
 
 ## 2ed filtering, according to the labeling patterns of interest
 
-## group C was fed with H
+## group C was fed with H2
 iso.C <- dual.iso(iso1 = H2, n11 = 5, n12 = 3, exp.base = exp.B, 
                   exp.iso = exp.C)
 
@@ -56,12 +56,12 @@ reduced_Result <- rResult(full_Result)
 This error is due to the following script:
 
 ```r
-## In group C, we are looking for analytes labeled with 5, 4, or 3 deuterium (H2).
+## In group C, we are looking for analytes labeled with 5, 4, or 3 deuteriums (H2).
 iso.C <- dual.iso(iso1 = H2, n11 = 5, n12 = 3, exp.base = exp.B, 
                   exp.iso = exp.C)
 ```
 
-To solve this memory limit problem, this script can be decomposed into 3 steps, which respectively search for analytes labled with 5, 4, or 3 deuterium (H2).
+To solve this memory limit problem, the above script can be decomposed into 3 sub-scripts, which respectively search for analytes labled with 5, 4, or 3 deuteriums (H2).
 
 ```r
 iso.C5 <- dual.iso(iso1 = H2, n11 = 5, n12 = 5, exp.base = exp.B, 
@@ -75,4 +75,4 @@ iso.C3 <- dual.iso(iso1 = H2, n11 = 3, n12 = 3, exp.base = exp.B,
 iso.C <- rbind(iso.C5, iso.C4, iso.C3)
 ```
 
-The decomposed step is usually only necessasy for iso.C, as the result list has been significantly reduced. we do not have to do it again for iso.D.
+The decomposition step is only usually necessasy for iso.C, as the result list has been significantly reduced. we do not have to do it again for iso.D.
