@@ -13,6 +13,7 @@ Version: 1.0
 Example 
 
 ```r 
+install.packages("devtools")
 devtools::install_github("YonghuiDong/Miso") 
 rm(list = ls())
 Library(Miso)
