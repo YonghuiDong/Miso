@@ -1,10 +1,10 @@
-Miso: Multi-isotope Labeling for Metabolomics Analysis
+Miso: Multi-Isotope Labeling for Metabolomics Analysis
 
-Version: 1.0
+Version: 0.1.1
 
 ## Description
 
-- A fast and efficient approach for fishing out the dual isotope labeled analytes
+- An efficient approach for fishing out the dual isotope labeled analytes
 - Can be easily extended to multiple isotope labeling experiments
 
 
@@ -13,24 +13,11 @@ Version: 1.0
 Example 
 
 ```r 
-install.packages("devtools")
-devtools::install_github("YonghuiDong/Miso") 
-rm(list = ls())
+install.packages("Miso")
 Library(Miso)
-mydata <- read.csv('neg_dong_parameter.csv', header = T)
-mydata$rt <- mydata$rt/60 ## convert second to min
 
-## 1st filtering, according to the experiment design
-mydataB <-mydata[mydata$B != 0,]
-mydataC <- mydata[mydata$E !=0 & mydata$C != 0 & mydata$D == 0 
-                  & mydata$B == 0 ,]
-mydataD <- mydata[mydata$E !=0 & mydata$D != 0 & mydata$C == 0 
-                  & mydata$B == 0 ,]
+data(lcms)
 
-## Prepare the Datacube
-exp.B <- cbind.data.frame(mz = mydataB$mz, RT = mydataB$rt)
-exp.C <- cbind.data.frame(mz = mydataC$mz, RT = mydataC$rt)
-exp.D <- cbind.data.frame(mz = mydataD$mz, RT = mydataD$rt)
 
 ## 2ed filtering, according to the labeling patterns of interest
 
