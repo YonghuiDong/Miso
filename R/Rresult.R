@@ -19,7 +19,7 @@ Rresult <- function(full_Result) {
   Result <- as.data.frame(full_Result)
   ## remove B, where both mz and RT are the same
   Result2 <- Result[!duplicated(Result[,c(1,2)]),]
-  Result2 <- Result2[order(Result2$Bmz, Result2$Cmz,Result2$Dmz),]
+  Result2 <- Result2[order(Result2$Unlabel_mz, Result2$Label_I_mz,Result2$Label_II_mz),]
   Result3 <- Result2[!duplicated(Result2[,c(3,4)]),]
   Result4 <- Result3[!duplicated(Result3[,c(6,7)]),]
   return(Result4)

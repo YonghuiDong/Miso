@@ -18,12 +18,12 @@
 #'
 Fresult <- function(iso.C, iso.D) {
   p <- as.matrix(findMatches(iso.C$B.mz, iso.D$B.mz))
-  fResult <- cbind(Bmz = iso.C$B.mz[p[,1]], Brt = iso.C$B.rt[p[,1]],
-                   Cmz = iso.C$iso1.mz[p[,1]], Crt = iso.C$iso1.rt[p[,1]],
-                   C_charge = iso.C$charge[p[,1]],
-                   Dmz = iso.D$iso1.mz[p[,2]],
-                   Drt= iso.D$iso1.rt[p[,2]],
-                   D_charge = iso.D$charge[p[,2]])
+  fResult <- cbind(Unlabel_mz = iso.C$B.mz[p[,1]], Unlabel_rt = iso.C$B.rt[p[,1]],
+                   Label_I_mz = iso.C$iso1.mz[p[,1]],  Label_I_rt = iso.C$iso1.rt[p[,1]],
+                   label_I = iso.C$charge[p[,1]],
+                   Label_II_mz = iso.D$iso1.mz[p[,2]],
+                   Label_II_rt= iso.D$iso1.rt[p[,2]],
+                   Label_II = iso.D$charge[p[,2]])
   fResult <- fResult[!duplicated(fResult),]
   return(fResult)
 }
