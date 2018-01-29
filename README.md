@@ -12,4 +12,4 @@ Version: 0.1.1
 
 ## Usage
 
-Please refer to [Miso_example]()for an detailed explaination.
+Please refer to [Miso_example](https://github.com/YonghuiDong/Miso_example) for a step-by-step usage guide.
