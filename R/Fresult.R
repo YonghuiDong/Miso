@@ -11,8 +11,8 @@
 #' exp.B <- explist$exp.B[, -2]
 #' exp.C <- explist$exp.C[, -2]
 #' exp.D <- explist$exp.D[, -2]
-#' iso.C <- diso(iso1 = 'H2', n11 = 4, n12 = 3, exp.base = exp.B, exp.iso = exp.C)
-#' iso.D <- diso(iso1 = 'C13', n11 = 9, n12 = 6, iso2 = 'N15', n21 = 1, n22 = 0,
+#' iso.C <- miso(iso1 = 'H2', n11 = 4, n12 = 3, exp.base = exp.B, exp.iso = exp.C)
+#' iso.D <- miso(iso1 = 'C13', n11 = 9, n12 = 6, iso2 = 'N15', n21 = 1, n22 = 0,
 #' exp.base = iso.C[,1:2], exp.iso = exp.D)
 #' full_Result <- Fresult(iso.C, iso.D)
 #'
