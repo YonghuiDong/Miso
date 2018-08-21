@@ -22,7 +22,6 @@
 #' iso.D <- diso(iso1 = 'C13', n11 = 9, n12 = 6, iso2 = 'N15', n21 = 1, n22 = 0,
 #' exp.base = iso.C[,1:2], exp.iso = exp.D)
 
-
 diso <- function(iso1, n11, n12, iso2 = 'NO', n21 = 0, n22 = 0, exp.base,
                      exp.iso, ppm = 30, rt.dif = 6) {
   # check the input variables
@@ -36,7 +35,7 @@ diso <- function(iso1, n11, n12, iso2 = 'NO', n21 = 0, n22 = 0, exp.base,
   if(!is.numeric(n22)) {stop('n22 is not numeric')}
   if (n11 < n12) {stop('The argument "n11" must be no less than "n12"' )}
   if (n21 < n22) {stop('The argument "n21" must be no less than "n22"' )}
-  cat("done.");
+  cat("done");
 
   cat("\n(2) Preparing datacube...");
   # prepare the labelling pattern according to the feeding precusor. iso2 is 0 by default.
@@ -66,7 +65,7 @@ diso <- function(iso1, n11, n12, iso2 = 'NO', n21 = 0, n22 = 0, exp.base,
   z_charge <- rep(pattern, rep(dim(exp.iso)[1],length(A)))
   mz_dif <- rep(A, rep(dim(exp.iso)[1],length(A)))
   C.dframe <- cbind(C.dframe, z_charge, mz_dif)
-  cat("done.");
+  cat("done");
 
   cat("\n(3) Performing the 2ed filtering...");
   # select real isotope labeled peaks according to accepted ppm and RT ranges
@@ -88,7 +87,7 @@ diso <- function(iso1, n11, n12, iso2 = 'NO', n21 = 0, n22 = 0, exp.base,
   ## prepare the result
   Result$iso1.mz = Result$iso1.mz + Result$mz_dif
   Result = Result[, 1:5]
-  cat("done.");
+  cat("done");
   return(Result)
 }
 
