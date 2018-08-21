@@ -2,6 +2,12 @@
 
 export(Fresult)
 export(Rresult)
-export(miso)
+export(diso)
+export(fold)
 export(prefilter)
+export(prefilter2)
 importFrom(S4Vectors,findMatches)
+importFrom(stats,TukeyHSD)
+importFrom(stats,aov)
+importFrom(stats,lm)
+importFrom(utils,combn)
