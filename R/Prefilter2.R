@@ -1,6 +1,6 @@
 #' @title Prefilter2
 #' @description prefiltering isotopically labeled analytes according to the experiment design.
-#' @param peaklist xcms processed dataset.
+#' @param peak xcms processed dataset.
 #' @param nsam number of samples in each experiment, default value = 2. If the sample numbers are different in each
 #' gorup, a vector can be used to input the number of samples in each group, i.e. nsam = c(0, 2, 2, 3, 3).
 #' @param p p-value threshold, default value = 0.05
@@ -8,13 +8,13 @@
 #' @importFrom stats lm
 #' @importFrom stats aov
 #' @importFrom stats TukeyHSD
-#' @return a filtered peaklist.
+#' @return a filtered peaklist
 #' @export
 #' @examples
 #' data(lcms)
 #' explist <- prefilter2(lcms[1:100, ])
 #'
-prefilter2 <- function(peaklist, nsam = 2, p = 0.05, fold = 10){
+prefilter2 <- function(peak, nsam = 2, p = 0.05, fold = 10){
 
   ##(1) check input
   cat("\n(1) Checking input parameters...");
@@ -29,6 +29,8 @@ prefilter2 <- function(peaklist, nsam = 2, p = 0.05, fold = 10){
   cat("done");
 
   ##(2) prepare new peaklist
+  ## subset peak
+  peaklist <- peak[peak$B > 0 | peak$C > 0 | peak$D > 0, ]
   A = peaklist[, c(-1:-12)]
   B = t(A)
   ## add group information
@@ -48,17 +50,7 @@ prefilter2 <- function(peaklist, nsam = 2, p = 0.05, fold = 10){
 
   ##(4) statistical test
   cat("\n(4) Performing statistical test...");
-  ## get each variable names (original row numbers)
-  var_peaks <- names(peaklist_new )[1:dim(peaklist)[1]]
-  ## perform test
-  aov.out <- vector("list", dim(peaklist)[1])
-  TukeyHSD.out <- vector("list", dim(peaklist)[1])
-  aov.out <- lapply(var_peaks, function(x) {
-    lm(substitute(i ~ group, list(i = as.name(x))), data = peaklist_new)})
-  ## extracting adjusted p-value
-  TukeyHSD.out <- lapply(aov.out, function(x) TukeyHSD(aov(x))$group[, 4])
-  output <- data.frame(matrix(unlist(TukeyHSD.out), ncol = 3, byrow = TRUE))
-  colnames(output) <- c("p_CB", "p_BD", "p_CD")
+  output <- getp(peaklist_new)
   cat("done");
 
   ##(5) perform the first filter
