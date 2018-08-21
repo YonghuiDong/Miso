@@ -42,7 +42,7 @@ prefilter <- function(peaklist, cutint = 0, nsam = 2, minsam = 1){
     min_sam = minsam
   }
   if(any(nsam >= minsam) == F){stop("minsam should be no over than nsam")}
-  cat("done.");
+  cat("done");
   cat("\n(2) Performing the first filtering...");
   # experiment number in each experiment group
   if(length(nsam) == 1){
@@ -121,6 +121,6 @@ prefilter <- function(peaklist, cutint = 0, nsam = 2, minsam = 1){
 
     exp_list <- list(exp.B = exp.B, exp.C = exp.C, exp.D = exp.D)
   }
-  cat("done.");
+  cat("done");
   return(exp_list)
 }
