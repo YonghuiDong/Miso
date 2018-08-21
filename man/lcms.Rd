@@ -4,7 +4,7 @@
 \name{lcms}
 \alias{lcms}
 \title{LC-MS peaklist}
-\format{A data frame with 68889 rows and 22 variables}
+\format{A data frame with 16133 rows and 22 variables}
 \usage{
 data(lcms)
 }
