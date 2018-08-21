@@ -4,10 +4,10 @@
 \alias{prefilter2}
 \title{Prefilter2}
 \usage{
-prefilter2(peaklist, nsam = 2, p = 0.05, fold = 10)
+prefilter2(peak, nsam = 2, p = 0.05, fold = 10)
 }
 \arguments{
-\item{peaklist}{xcms processed dataset.}
+\item{peak}{xcms processed dataset.}
 
 \item{nsam}{number of samples in each experiment, default value = 2. If the sample numbers are different in each
 gorup, a vector can be used to input the number of samples in each group, i.e. nsam = c(0, 2, 2, 3, 3).}
@@ -17,7 +17,7 @@ gorup, a vector can be used to input the number of samples in each group, i.e. n
 \item{fold}{fold change threshold, default value = 10}
 }
 \value{
-a filtered peaklist.
+a filtered peaklist
 }
 \description{
 prefiltering isotopically labeled analytes according to the experiment design.
