@@ -13,3 +13,7 @@ Version: 0.1.3
 ## Usage
 
 Please refer to [Miso_example](https://github.com/YonghuiDong/Miso_example) for a step-by-step usage guide.
+
+## Citation
+
+Liron F, Dong Y, Heinig U, Rogachev I, and Aharoni A. 2018. DLEMMA-MS-Imaging for Identification of Spatially Localized Metabolites and Metabolic Network Map Reconstruction. Analytical chemistry. [Link](https://pubs.acs.org/doi/10.1021/acs.analchem.8b01644)
