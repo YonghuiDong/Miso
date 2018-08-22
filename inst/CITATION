@@ -1,0 +1,23 @@
+bibentry(
+  bibtype="Article",
+  title = "DLEMMA-MS-Imaging for Identification of Spatially Localized Metabolites and Metabolic Network Map Reconstruction",
+  author = c(person("Liron", "Feldberg"),
+             person("Yonghui", "Dong"),
+             person("Uwe", "Heinig"),
+             person("Ilana", "Rogachev"),
+             person("Asaph", "Aharoni")
+             ),
+  volume = "",
+  number = "",
+  pages = "",
+  year = "2018",
+  doi = "10.1093/bioinformatics/bts447",
+  url = "https://pubs.acs.org/doi/10.1021/acs.analchem.8b01644",
+  eprint = "https://pubs.acs.org/doi/10.1021/acs.analchem.8b01644",
+  journal = "Analytical Chemistry",
+  publisher= "ACS Publication",
+  key = "Miso",
+  header = "To cite the Miso package in publications please use:",
+  textVersion = paste("L Feldberg, Y Dong, U Heinig, I Rogachev, and A Aharoni. 2018.",
+                      "DLEMMA-MS-Imaging for Identification of Spatially Localized Metabolites and Metabolic Network Map Reconstruction.", "Analytical Chemistry, doi: 10.1021/acs.analchem.8b01644.")
+)

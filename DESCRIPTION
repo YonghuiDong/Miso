@@ -6,7 +6,7 @@ Author: Yonghui Dong
 Maintainer: Yonghui Dong <yonghui.dong@gmail.com>
 Description: An efficient approach for fishing out the dual (or multiple)
     isotope labeled analytes using dual labeling of metabolites for 
-    metabolome analysis (DLEMMA) approach, described in Liron (2009) <doi:10.1021/ac901495a>.
+    metabolome analysis (DLEMMA) approach, described in Liron (2018) <doi:10.1021/acs.analchem.8b01644>.
 Depends: 
     R (>= 2.10), 
 Imports:

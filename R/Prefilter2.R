@@ -43,18 +43,18 @@ prefilter2 <- function(peak, nsam = 2, p = 0.05, fold = 10){
   ## only select B, C, D groups
   peaklist_new <- C[(C$group %in% c("B", "C", "D")),]
 
-  ##(3) calculating fold change
-  cat("\n(3) Calculating fold change...");
+  ##(2) calculating fold change
+  cat("\n(2) Calculating fold change...");
   ret <- fold(peaklist_new[, -dim(peaklist_new)[2]], peaklist_new$group)
   cat("done");
 
-  ##(4) statistical test
-  cat("\n(4) Performing statistical test...");
+  ##(3) statistical test
+  cat("\n(3) Performing statistical test...");
   output <- getp(peaklist_new)
   cat("done");
 
   ##(5) perform the first filter
-  cat("\n(5) Performing the first filtering...");
+  cat("\n(4) Performing the first filtering...");
 
   ## extract the index in which either p is less than the p-value threshold or fold change
   ## is higher than the fold change threshold
