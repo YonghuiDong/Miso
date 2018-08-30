@@ -14,17 +14,17 @@
 #' f <- LETTERS[f]
 #' ret <- fold(dat, f)
 
-fold <- function(x, f){
+ fold <- function(x, f){
   f <- factor(f, levels = c("D", "C", "B"))
   i <- split(1:nrow(x), f)
-  x <- sapply(i, function(i){colMeans(x[i,])})
-  x <- t(x)
+  mean_int <- sapply(i, function(i){colMeans(x[i,])})
+  x <- t(mean_int)
   j <- combn(levels(f), 2)
   f_change <- x[j[1,],] / x[j[2,],]
   ## remove NaN in f_change Matrix
   f_change[is.nan(f_change)] <- 0
   rownames(f_change) <- paste('F_', j[1,], j[2,], sep = '')
   f_change <- as.data.frame(t(f_change))
-  ret <- cbind.data.frame(f_change, F_CD = 1 / f_change$F_DC)
+  ret <- cbind.data.frame(mean_int, f_change, F_CD = 1 / f_change$F_DC)
   ret
 }
