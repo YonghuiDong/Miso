@@ -68,12 +68,9 @@ prefilter2 <- function(peak, nsam = 2, p = 0.05, fold = 10){
   peaklistB <- peaklist[peaklist$B > 0, ]
   peaklistC <- peaklist[c_index, ]
   peaklistD <- peaklist[d_index, ]
-  exp.B <- cbind.data.frame(mz = peaklistB$mz, intensity = peaklistB[, (13 + each_exp[1])],
-                            rt = peaklistB$rt)
-  exp.C <- cbind.data.frame(mz = peaklistC$mz, intensity = peaklistC[, (13 + sum(each_exp[1:2]))],
-                            rt = peaklistC$rt)
-  exp.D <- cbind.data.frame(mz = peaklistD$mz, intensity = peaklistD[, (13 + sum(each_exp[1:3]))],
-                            rt = peaklistD$rt)
+  exp.B <- cbind.data.frame(mz = peaklistB$mz, intensity = ret[peaklist$B > 0, ]$B, rt = peaklistB$rt)
+  exp.C <- cbind.data.frame(mz = peaklistC$mz, intensity = ret[c_index, ]$C, rt = peaklistC$rt)
+  exp.D <- cbind.data.frame(mz = peaklistD$mz, intensity = ret[d_index, ]$D, rt = peaklistD$rt)
   stat <- cbind.data.frame(peaklist[, c(1:6)], output, ret)
   exp_list <- list(exp.B = exp.B, exp.C = exp.C, exp.D = exp.D, stat = stat)
   cat("done");
