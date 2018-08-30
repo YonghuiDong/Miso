@@ -14,13 +14,13 @@
 #' @export
 #' @examples
 #' data(lcms)
-#' explist <- prefilter(lcms[1: 500, ]) # use a subset of lcms data as example
-#' exp.B <- explist$exp.B[, -2]
-#' exp.C <- explist$exp.C[, -2]
-#' exp.D <- explist$exp.D[, -2]
+#' explist <- prefilter2(lcms[1: 500, ]) # use a subset of lcms data as example
+#' exp.B <- explist$exp.B
+#' exp.C <- explist$exp.C
+#' exp.D <- explist$exp.D
 #' iso.C <- diso(iso1 = 'H2', n11 = 4, n12 = 2, exp.base = exp.B, exp.iso = exp.C)
 #' iso.D <- diso(iso1 = 'C13', n11 = 9, n12 = 6, iso2 = 'N15', n21 = 1, n22 = 0,
-#' exp.base = iso.C[,1:2], exp.iso = exp.D)
+#' exp.base = iso.C[,1:3], exp.iso = exp.D)
 
 diso <- function(iso1, n11, n12, iso2 = 'NO', n21 = 0, n22 = 0, exp.base,
                      exp.iso, ppm = 30, rt.dif = 6) {
@@ -60,6 +60,11 @@ diso <- function(iso1, n11, n12, iso2 = 'NO', n21 = 0, n22 = 0, exp.base,
     C[[i]]$rt <- C[[i]]$rt + A[i]
   }
 
+  ## correct Intensity
+  for (i in 1 : length(A)) {
+    C[[i]]$intensity <- C[[i]]$intensity + A[i]
+  }
+
   ## prepare data frame
   C.dframe <- do.call(rbind.data.frame, C)
   z_charge <- rep(pattern, rep(dim(exp.iso)[1],length(A)))
@@ -72,8 +77,8 @@ diso <- function(iso1, n11, n12, iso2 = 'NO', n21 = 0, n22 = 0, exp.base,
   expand.grid.df <- function(...) Reduce(function(...) merge(..., by=NULL),
                                          list(...))
   CB.expand <- expand.grid.df(exp.base, C.dframe)
-  colnames(CB.expand) <-c('B.mz', 'B.rt', 'iso1.mz', 'iso1.rt','charge',
-                          'mz_dif')
+  colnames(CB.expand) <-c('B.mz', 'B.intensity', 'B.rt', 'iso1.mz', 'iso1.intensity','iso1.rt',
+                          'charge', 'mz_dif')
 
   ## calculate real ppm
   abs.mz = with(CB.expand, abs(iso1.mz - B.mz) * 10^6 / B.mz)
@@ -86,7 +91,7 @@ diso <- function(iso1, n11, n12, iso2 = 'NO', n21 = 0, n22 = 0, exp.base,
 
   ## prepare the result
   Result$iso1.mz = Result$iso1.mz + Result$mz_dif
-  Result = Result[, 1:5]
+  Result = Result[, -length(Result)]
   cat("done");
   return(Result)
 }
