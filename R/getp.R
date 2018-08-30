@@ -47,10 +47,10 @@ getp <- function(dat){
     ## run `TukeyHSD` on `aov_hack`
     result[[i]] <- TukeyHSD(aov_hack)$group[, 4]
   }
-    ##(4) output
-    output <- data.frame(matrix(unlist(result), ncol = 3, byrow = TRUE))
-    colnames(output) <- c("p_CD", "p_BD", "p_CB")
-    output
+  ##(4) output
+  output <- data.frame(matrix(unlist(result), ncol = 3, byrow = TRUE))
+  colnames(output) <- c("p_CD", "p_BD", "p_CB")
+  output
 }
 
 
