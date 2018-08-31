@@ -11,7 +11,7 @@
 #' @export
 #' @examples
 #' data(lcms)
-#' explist <- prefilter(lcms)
+#' explist <- prefilter(lcms[1:100, ])
 
 prefilter <- function(peak, cutint = 0, nsam = 2, minsam = 1){
   cat("\n(1) Checking input parameters...");

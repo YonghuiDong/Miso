@@ -26,5 +26,5 @@ prefiltering isotopically labeled analytes according to the experiment design.
 }
 \examples{
 data(lcms)
-explist <- prefilter(lcms)
+explist <- prefilter(lcms[1:100, ])
 }

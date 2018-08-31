@@ -36,7 +36,7 @@ filtering isotopically labeled analytes according to RT and mass differences
 }
 \examples{
 data(lcms)
-explist <- prefilter2(lcms[1: 500, ]) # use a subset of lcms data as example
+explist <- prefilter(lcms[1: 100, ]) # use a subset of lcms data as example
 exp.B <- explist$exp.B
 exp.C <- explist$exp.C
 exp.D <- explist$exp.D
