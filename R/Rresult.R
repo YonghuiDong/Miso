@@ -17,10 +17,17 @@
 
 Rresult <- function(full_Result) {
   Result <- as.data.frame(full_Result)
-  ## remove B, where mz, Intensity, and RT are the same
-  Result2 <- Result[!duplicated(Result[,c(1, 2, 3)]),]
-  Result2 <- Result2[order(Result2$Unlabel_mz, Result2$Label_I_mz,Result2$Label_II_mz),]
-  Result3 <- Result2[!duplicated(Result2[,c(4, 5, 6)]),]
-  Result4 <- Result3[!duplicated(Result3[,c(8, 9, 10)]),]
-  return(Result4)
+  #(1) remove note for "no visible binding for global variable"
+  Unlabel_mz <- Unlabel_rt <- Label_I_int <- Label_II_int <- NULL
+  #(2) find base peaks for Label I and Label II molecules
+  Result1 <- Result %>%
+    group_by(Unlabel_mz, Unlabel_rt) %>%
+    filter(Label_I_int == max(Label_I_int), Label_II_int == max(Label_II_int))
+  #(3) remove repeated rows that cannot be removed using '!duplicated()' function
+  # due to some formatting differences.
+  Result2 <- Result1[!duplicated(Result1[,c(1, 2, 3)]),]
+  #(4) sort data according to RT
+  Result3 <- Result2[order(Result2$Unlabel_rt), ]
+  return(Result3)
 }
+
