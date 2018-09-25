@@ -1,7 +1,7 @@
 Package: Miso
 Type: Package
 Title: Multi-Isotope Labeling for Metabolomics Analysis
-Version: 0.1.4
+Version: 0.1.5
 Author: Yonghui Dong
 Maintainer: Yonghui Dong <yonghui.dong@gmail.com>
 Description: An efficient approach for fishing out the dual (or multiple)
@@ -13,6 +13,7 @@ Imports:
     S4Vectors,
     stats,
     utils,
+    dplyr,
     plotly
 License: GPL-3
 Encoding: UTF-8
