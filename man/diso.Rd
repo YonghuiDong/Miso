@@ -5,7 +5,7 @@
 \title{Isotope filtering}
 \usage{
 diso(iso1, n11, n12, iso2 = "NO", n21 = 0, n22 = 0, exp.base,
-  exp.iso, ppm = 30, rt.dif = 6)
+  exp.iso, ppm = 10, rt.dif = 6)
 }
 \arguments{
 \item{iso1}{the first labled atom in precusor ion.}

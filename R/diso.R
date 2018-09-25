@@ -23,7 +23,7 @@
 #' exp.base = iso.C[,1:3], exp.iso = exp.D)
 
 diso <- function(iso1, n11, n12, iso2 = 'NO', n21 = 0, n22 = 0, exp.base,
-                     exp.iso, ppm = 30, rt.dif = 6) {
+                     exp.iso, ppm = 10, rt.dif = 6) {
   # check the input variables
   cat("\n(1) Checking input parameters...");
   element <- isoDB$element
