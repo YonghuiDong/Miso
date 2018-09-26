@@ -1,6 +1,7 @@
 #' @title Reduced result list
 #' @description export reduced isotope labeled result list
 #' @param full_Result full result list
+#' @param cutint cutoff intensity. rows that any ion intensities below the cutoff value will removed
 #' @return csv file with repeated results being removed
 #' @export
 #' @examples
@@ -15,7 +16,7 @@
 #' full_Result <- Fresult(iso.C, iso.D)
 #' reduced_Result <- Rresult(full_Result)
 
-Rresult <- function(full_Result) {
+Rresult <- function(full_Result, cutint = 0) {
   Result <- as.data.frame(full_Result)
   #(1) remove note for "no visible binding for global variable"
   Unlabel_mz <- Unlabel_rt <- Label_I_int <- Label_II_int <- NULL
@@ -28,6 +29,8 @@ Rresult <- function(full_Result) {
   Result2 <- Result1[!duplicated(Result1[,c(1, 2, 3)]),]
   #(4) sort data according to RT
   Result3 <- Result2[order(Result2$Unlabel_rt), ]
-  return(Result3)
+  Result4 <- Result3[Result3$Unlabel_int >= cutint & Result3$Label_I_int >= cutint
+                      & Result3$Label_II_int >= cutint, ]
+  return(Result4)
 }
 
