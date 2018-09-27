@@ -1,6 +1,6 @@
 #' @title plot isotopologues
 #' @description plot unlabled and labeled Isotopologues from filtering result
-#' @param dat isoto filtering result
+#' @param dat isotope filtering result
 #' @param rinx row index
 #' @import plotly
 #' @return interactive plot

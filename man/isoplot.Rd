@@ -7,7 +7,7 @@
 isoplot(dat, rinx)
 }
 \arguments{
-\item{dat}{isoto filtering result}
+\item{dat}{isotope filtering result}
 
 \item{rinx}{row index}
 }
