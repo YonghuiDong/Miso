@@ -3,7 +3,6 @@
 
 Miso: Multi-Isotope Labeling for Metabolomics Analysis
 
-Version: 0.1.4
 
 ## Description
 
