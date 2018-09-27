@@ -9,7 +9,7 @@ Rresult(full_Result, cutint = 0)
 \arguments{
 \item{full_Result}{full result list}
 
-\item{cutint}{cutoff intensity. rows that any ion intensities below the cutoff value will removed}
+\item{cutint}{cutoff intensity.Rows that any ion intensities below the cutoff value will removed}
 }
 \value{
 csv file with repeated results being removed
