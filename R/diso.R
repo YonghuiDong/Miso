@@ -14,10 +14,10 @@
 #' @export
 #' @examples
 #' data(lcms)
-#' explist <- prefilter(lcms[1: 100, ]) # use a subset of lcms data as example
-#' exp.B <- explist$exp.B
-#' exp.C <- explist$exp.C
-#' exp.D <- explist$exp.D
+#' explist <- prefilter(lcms, subgroup = c("B", "C", "D"), unlabel = "B")
+#' exp.B <- explist$B
+#' exp.C <- explist$C
+#' exp.D <- explist$D
 #' iso.C <- diso(iso1 = 'H2', n11 = 4, n12 = 2, exp.base = exp.B, exp.iso = exp.C)
 #' iso.D <- diso(iso1 = 'C13', n11 = 9, n12 = 6, iso2 = 'N15', n21 = 1, n22 = 0,
 #' exp.base = iso.C[,1:3], exp.iso = exp.D)
@@ -67,31 +67,38 @@ diso <- function(iso1, n11, n12, iso2 = 'NO', n21 = 0, n22 = 0, exp.base,
 
   ## prepare data frame
   C.dframe <- do.call(rbind.data.frame, C)
-  z_charge <- rep(pattern, rep(dim(exp.iso)[1],length(A)))
+  z_charge <- rep(pattern, rep(dim(exp.iso)[1], length(A)))
   mz_dif <- rep(A, rep(dim(exp.iso)[1],length(A)))
   C.dframe <- cbind(C.dframe, z_charge, mz_dif)
   cat("done");
 
   cat("\n(3) Performing the 2ed filtering...");
   # select real isotope labeled peaks according to accepted ppm and RT ranges
-  expand.grid.df <- function(...) Reduce(function(...) merge(..., by=NULL),
-                                         list(...))
+  expand.grid.df <- function(...) Reduce(function(...) merge(..., by = NULL), list(...))
   CB.expand <- expand.grid.df(exp.base, C.dframe)
-  colnames(CB.expand) <-c('B.mz', 'B.intensity', 'B.rt', 'iso1.mz', 'iso1.intensity','iso1.rt',
+  ## name CB.expand according to feeding pattern
+  if(iso2 == "NO") {
+    iso2 = ""
+  } else {
+    iso2 = iso2
+  }
+  colnames(CB.expand) <-c(paste("B.", c("mz", "rt", "intensity"), sep = ""),
+                          paste(iso1, iso2, ".", c("mz", "rt", "intensity"), sep = ""),
                           'charge', 'mz_dif')
-
   ## calculate real ppm
-  abs.mz = with(CB.expand, abs(iso1.mz - B.mz) * 10^6 / B.mz)
+  iso_mz <- paste(iso1, iso2, ".", "mz", sep = "")
+  abs.mz = with(CB.expand, abs(CB.expand[iso_mz] - B.mz) * 10^6 / B.mz)
 
   ## calculate RT dufference
-  abs.rt = with(CB.expand, abs(iso1.rt - B.rt))
+  iso_rt <- paste(iso1, iso2, ".", "rt", sep = "")
+  abs.rt = with(CB.expand, abs(CB.expand[iso_rt] - B.rt))
 
   ## select the peaks in our acceprance range
   Result = CB.expand[(abs.mz <= ppm & abs.rt <= rt.dif),]
 
   ## prepare the result
-  Result$iso1.mz = Result$iso1.mz + Result$mz_dif
-  Result = Result[, -length(Result)]
+  Result[iso_mz] = Result[iso_mz] + Result$mz_dif
+  Result$mz_dif = NULL
   cat("done");
   return(Result)
 }
