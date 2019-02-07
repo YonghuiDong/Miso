@@ -1,21 +1,21 @@
 Package: Miso
 Type: Package
 Title: Multi-Isotope Labeling for Metabolomics Analysis
-Version: 0.1.5
+Version: 0.2.0
 Author: Yonghui Dong
 Maintainer: Yonghui Dong <yonghui.dong@gmail.com>
 Description: An efficient approach for fishing out the dual (or multiple)
     isotope labeled analytes using dual labeling of metabolites for 
     metabolome analysis (DLEMMA) approach, described in Liron (2018) <doi:10.1021/acs.analchem.8b01644>.
 Depends: 
-    R (>= 2.10), 
+    R (>= 2.10)
+biocViews:
 Imports:
-    S4Vectors,
+    xcms,
     stats,
     utils,
-    dplyr,
-    plotly
+    dplyr
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
