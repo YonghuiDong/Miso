@@ -14,7 +14,10 @@ Imports:
     xcms,
     stats,
     utils,
-    dplyr
+    dplyr,
+    ggplot2,
+    scales,
+    plotly
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
