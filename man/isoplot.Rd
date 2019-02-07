@@ -19,14 +19,13 @@ plot unlabled and labeled Isotopologues from filtering result
 }
 \examples{
 data(lcms)
-explist <- prefilter(lcms[1: 500, ]) # use a subset of lcms data as example
-exp.B <- explist$exp.B
-exp.C <- explist$exp.C
-exp.D <- explist$exp.D
-iso.C <- diso(iso1 = 'H2', n11 = 4, n12 = 3, exp.base = exp.B, exp.iso = exp.C)
+explist <- prefilter(lcms, subgroup = c("B", "C", "D"), unlabel = "B")
+exp.B <- explist$B
+exp.C <- explist$C
+exp.D <- explist$D
+iso.C <- diso(iso1 = 'H2', n11 = 4, n12 = 2, exp.base = exp.B, exp.iso = exp.C)
 iso.D <- diso(iso1 = 'C13', n11 = 9, n12 = 6, iso2 = 'N15', n21 = 1, n22 = 0,
 exp.base = iso.C[,1:3], exp.iso = exp.D)
-full_Result <- Fresult(iso.C, iso.D)
-reduced_Result <- Rresult(full_Result)
-isoplot(full_Result, 1)
+full_result <- Fresult(iso.C, iso.D)
+isoplot(full_result, 1)
 }

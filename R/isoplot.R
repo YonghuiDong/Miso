@@ -2,21 +2,21 @@
 #' @description plot unlabled and labeled Isotopologues from filtering result
 #' @param dat isotope filtering result
 #' @param rinx row index
-#' @import plotly
+#' @import ggplot2
+#' @importFrom plotly ggplotly
 #' @return interactive plot
 #' @export
 #' @examples
 #' data(lcms)
-#' explist <- prefilter(lcms[1: 500, ]) # use a subset of lcms data as example
-#' exp.B <- explist$exp.B
-#' exp.C <- explist$exp.C
-#' exp.D <- explist$exp.D
-#' iso.C <- diso(iso1 = 'H2', n11 = 4, n12 = 3, exp.base = exp.B, exp.iso = exp.C)
+#' explist <- prefilter(lcms, subgroup = c("B", "C", "D"), unlabel = "B")
+#' exp.B <- explist$B
+#' exp.C <- explist$C
+#' exp.D <- explist$D
+#' iso.C <- diso(iso1 = 'H2', n11 = 4, n12 = 2, exp.base = exp.B, exp.iso = exp.C)
 #' iso.D <- diso(iso1 = 'C13', n11 = 9, n12 = 6, iso2 = 'N15', n21 = 1, n22 = 0,
 #' exp.base = iso.C[,1:3], exp.iso = exp.D)
-#' full_Result <- Fresult(iso.C, iso.D)
-#' reduced_Result <- Rresult(full_Result)
-#' isoplot(full_Result, 1)
+#' full_result <- Fresult(iso.C, iso.D)
+#' isoplot(full_result, 1)
 
 isoplot <- function(dat, rinx) {
   ##(1) check input
@@ -26,27 +26,20 @@ isoplot <- function(dat, rinx) {
 
   ##(2) prepare input
   dat <- as.data.frame(dat)[rinx,]
-  dat2 <- cbind.data.frame(mz = c(dat$Unlabel_mz, dat$Label_I_mz, dat$Label_II_mz),
-                           Int = c(dat$Unlabel_int, dat$Label_I_int, dat$Label_II_int))
-  dat2[is.na(dat2)] = 0
+  rt <- round(dat$B.rt, digits=2)
+  mz <- as.numeric(dat[, grepl("mz", colnames(dat))])
+  int <- as.numeric(dat[, grepl("intensity", colnames(dat))])
+  dat2 <- cbind.data.frame(mz, int)
 
   ##(3) plot
-  plot_ly() %>%
-    add_lines(x = rep(dat$Unlabel_mz, 2), y = c(0, dat$Unlabel_int), name = "unlabeled",
-              line = list(color = "black", width = 2)) %>%
-    add_lines(x = rep(dat$Label_I_mz, 2), y = c(0, dat$Label_I_int), name = "labeled I",
-              line = list(color = "red", width = 2)) %>%
-    add_lines(x = rep(dat$Label_II_mz, 2), y = c(0, dat$Label_II_int), name = "labeled II",
-              line = list(color = "blue", width = 2)) %>%
-    layout(
-      title = paste("Isotopologues @ RT=", dat$Unlabel_rt, "min"),
-      xaxis = list(
-        title = 'm/z',
-        range = c(min(dat2$mz) - 3, max(dat2$mz) + 3)
-      ),
-      yaxis = list(
-        title = 'Mean Intensity',
-        range = c(0, max(dat2$Int) * 1.1)
-      )
-    )
+  p <- ggplot(dat2, aes(x = mz, ymax = int, ymin = 0)) +
+    geom_linerange(size = 0.6) +
+    xlab("m/z") +
+    ylab("Intensity") +
+    scale_y_continuous(expand = c(0, 0), limits = c(0, max(int)*1.1),
+                       labels = scales::scientific) +
+    theme_bw() +
+    ggtitle(paste("Isotopologue at RT = ", rt, "min"))
+    ggplotly(p)
 }
+
