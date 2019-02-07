@@ -1,128 +1,110 @@
 #' @title Prefilter
 #' @description prefiltering isotopically labeled analytes according to the experiment design.
-#' @param peak xcms processed dataset.
-#' @param cutint cutoff intensity. Ion intensity below the cutoff value will be considered as noise, default value 0.
-#' @param nsam number of samples in each experiment, default value 2. If the sample numbers are different in each
-#' gorup, a vector can be used to input the number of samples in each group, i.e. nsam = c(0, 2, 2, 3, 3).
-#' @param minsam minimum number of samples.The peak is considered valid only when it is at least detected in
-#' the minimum number of samples in a group, default value 1.  A vector can be used to To control the minsam in each
-#' group, i.e. nsam = c(1, 1, 2, 2, 1).
-#' @return a filtered peaklist.
+#' @param xset xcms object.
+#' @param subgroup subset the xcms groups. The name should be the same as in phboData$class. default = NULL, which means no subset will be performed.
+#' @param unlabel specify which is unlabeled group.
+#' @param reps if there are replicates in the sample.
+#' @param p p-value threshold, default value = 0.05
+#' @param folds fold change threshold, default value = 10
+#' @import xcms
+#' @importFrom stats lm
+#' @importFrom stats aov
+#' @importFrom stats TukeyHSD
+#' @return a filtered peaklist
 #' @export
 #' @examples
 #' data(lcms)
-#' explist <- prefilter(lcms[1:100, ])
+#' explist <- prefilter(lcms, subgroup = c("B", "C", "D"), unlabel = "B")
 
-prefilter <- function(peak, cutint = 0, nsam = 2, minsam = 1){
+prefilter <- function(xset, subgroup = NULL, unlabel = NULL,  reps = TRUE, p = 0.05, folds = 10){
+
+  peakTable <- NULL
+  ##(1) check input
   cat("\n(1) Checking input parameters...");
-  # check cutint
-  if(!is.numeric(cutint)) {stop("invalid class of cutint - not numeric")}
-  if(cutint < 0) {stop("cut off intensity value should be no less than 0")}
-  # check nsam
-  if(!is.numeric(nsam)) {stop("invalid calss of nsam - not numeric")}
-  if(length(nsam) != 1 & length(nsam) != 5) {stop("invalid length of nsam, either 1 or 5")}
-  if(min(nsam) < 0) {stop("nsam should be no less than 0")}
-  if(any(nsam %% 1 != 0)) {stop("nsam should be integer")}
-  # check minsam
-  if(!is.numeric(minsam)){stop("invalid calss of minsam - not numeric")}
-  if(length(minsam) != 1 & length(minsam) != 5){stop("invalid length of minsam, either 1 or 5")}
-  if(min(minsam) < 0){stop("nsam should be no less than 0")}
-  if(any(minsam %% 1 != 0)){stop("minsam should be integer")}
-  # make sure minsam is no over than nsam
-  # experiment number in each experiment group
-  if(length(nsam) == 1){
-    each_exp = rep(nsam,5)
-  } else{
-    each_exp = nsam
-  }
-  if(any(nsam >= minsam) == F){stop("minsam should be no over than nsam")}
+  ## check object type
+  if(class(xset) != "xcmsSet") {stop("the input object is not an xcmsSet object")}
+  ## check xset phenoData
+  pheno_levels <- levels(xset@phenoData$class)
+  if(length(pheno_levels) < 2) {stop("at least two sample groups should be included")}
+  ## check subsetgroup
+  if(is.null(subgroup) == FALSE & all(subgroup %in% pheno_levels) == FALSE)
+  {stop("selected subgroup(s) do not exist in your data")}
+  ## check unlabel
+  if(length(unlabel) == 0) {stop("unlabeled group does not exist")}
+  if(unlabel %in% levels(xset@phenoData$class) == FALSE) {stop("unlabled group does not exist")}
+  ## check reps
+  if(reps %in% c(TRUE, FALSE) == FALSE) {stop("specify if replicates are contained in your sample: TURE/FALSE")}
+  ## check p value
+  if(!is.numeric(p)){stop("invalid calss of p-value threshold: not numeric")}
+  if(p > 1 | p < 0){stop("invalid p-value, the value should between 0 and 1")}
   cat("done");
 
-  cat("\n(2) Prepareing datacube...");
-  ## subset peak
-  peaklist <- peak[peak$B > 0 | peak$C > 0 | peak$D > 0, ]
-  A = peaklist[, c(-1:-12)]
+  ##(2) prepare new peaklist
+  ## (2.1) subset peak
+  ## get peaktable
+  peak <- peakTable(xset)
+  ## the first 7 rows are always the same in any aligned xcms peak table
+  A = peak[, c(-1:-(7 + length(pheno_levels)))]
   B = t(A)
-  ## add group information
-  if(length(nsam) == 1){
-    each_exp = rep(nsam,5)
-  } else{
-    each_exp = nsam
+  C = cbind.data.frame(B, group = xset@phenoData$class)
+  ## only select subgroups if subgroup is not NULL
+  if(is.null(subgroup) == TRUE) {
+    peaklist_new = C
+  } else {
+    peaklist_new <- C[(C$group %in% subgroup),]
+    ## drop factors
+    peaklist_new$group <- factor(peaklist_new$group)
   }
-  C = cbind.data.frame(B, group = rep(LETTERS[1:5], each_exp))
-  ## only select B, C, D groups
-  peaklist_new <- C[(C$group %in% c("B", "C", "D")),]
+
+  ##(3) calculating fold change
+  cat("\n(2) Calculating fold change...");
+  fold <- fold(peaklist_new)
+  ## add fold infor in peak
+  peak <- cbind(fold, peak)
   cat("done");
 
-  ## calculating fold change
-  cat("\n(3) Calculating fold change...");
-  ret <- fold(peaklist_new[, -dim(peaklist_new)[2]], peaklist_new$group)
+  ##(4) statistical test
+  cat("\n(3) Performing statistical test...");
+  if (reps == TRUE) {
+    stat <- getp(peaklist_new)
+  } else {
+    stat <- getp0(peaklist_new)
+  }
+
   cat("done");
 
+  ##(5) perform the first filter
   cat("\n(4) Performing the first filtering...");
-  # first filtering & prepare datacube. Regarding intensity, only the intensity of the first sample in each Exp is used
-  if (cutint == 0){
-    # calculate the fitted index from each group
-    b_index <- which(peaklist$B >= minsam)
-    c_index <- which(peaklist$C >= minsam & peaklist$D == 0 & peaklist$B == 0)
-    d_index <- which(peaklist$D >= minsam & peaklist$C == 0 & peaklist$B == 0)
-    # get fitted peaklist
-    peaklistB <- peaklist[b_index, ]
-    peaklistC <- peaklist[c_index, ]
-    peaklistD <- peaklist[d_index, ]
-    # add mz, int and rt
-    exp.B <- cbind.data.frame(mz = peaklistB$mz, intensity = ret[b_index, ]$B, rt = peaklistB$rt)
-    exp.C <- cbind.data.frame(mz = peaklistC$mz, intensity = ret[c_index, ]$C, rt = peaklistC$rt)
-    exp.D <- cbind.data.frame(mz = peaklistD$mz, intensity = ret[d_index, ]$D, rt = peaklistD$rt)
-    stat <- cbind.data.frame(peaklist[, c(1:6)], ret)
-    exp_list <- list(exp.B = exp.B, exp.C = exp.C, exp.D = exp.D, stat = stat)
-  } else{
-    m = sum(each_exp)
-    n = dim(peaklist)[2]
-    # thoese intensity values less than cutint will be set to 0
-    peaklist[, (n-m+1):n][peaklist[, (n-m+1):n] < cutint] <- 0
-    # need to recalculate B, C, D, E
-    # creat empty vectors
-    B <- vector('integer', length = dim(peaklist)[1])
-    C <- vector('integer', length = dim(peaklist)[1])
-    D <- vector('integer', length = dim(peaklist)[1])
 
-    # calculate the beginning and end intensity index for each Exp.
-    # here considers the sample sizes among each Exp can be different
-    b1 <- 13 + each_exp[1]
-    b2 <- 12 + sum(each_exp[1:2])
-    c1 <- 13 + sum(each_exp[1:2])
-    c2 <- 12 + sum(each_exp[1:3])
-    d1 <- 13 + sum(each_exp[1:3])
-    d2 <- 12 + sum(each_exp[1:4])
-    # The intensity over than 0 is transformed into 1
-    peaklist2 <-peaklist
-    peaklist2[, (n-m+1):n][peaklist2[, (n-m+1):n] > 0] <- 1
-    for (i in 1: dim(peaklist2)[1]){
-      # calculate new B, C, D, E
-      B[i] <- sum(peaklist2[, b1][i] : peaklist2[, b2][i])
-      C[i] <- sum(peaklist2[, c1][i] : peaklist2[, c2][i])
-      D[i] <- sum(peaklist2[, d1][i] : peaklist2[, d2][i])
-    }
-    # replace old peaklist B, C, D, E
-    peaklist$B <- B
-    peaklist$C <- C
-    peaklist$D <- D
-    # calculate the fitted index from each group
-    b_index <- which(peaklist$B >= minsam)
-    c_index <- which(peaklist$C >= minsam & peaklist$D == 0 & peaklist$B == 0)
-    d_index <- which(peaklist$D >= minsam & peaklist$C == 0 & peaklist$B == 0)
-    # get fitted peaklist
-    peaklistB <- peaklist[b_index, ]
-    peaklistC <- peaklist[c_index, ]
-    peaklistD <- peaklist[d_index, ]
-    # add mz, int and rt
-    exp.B <- cbind.data.frame(mz = peaklistB$mz, intensity = ret[b_index, ]$B, rt = peaklistB$rt)
-    exp.C <- cbind.data.frame(mz = peaklistC$mz, intensity = ret[c_index, ]$C, rt = peaklistC$rt)
-    exp.D <- cbind.data.frame(mz = peaklistD$mz, intensity = ret[d_index, ]$D, rt = peaklistD$rt)
-    stat <- cbind.data.frame(peaklist[, c(1:6)], ret)
-    exp_list <- list(exp.B = exp.B, exp.C = exp.C, exp.D = exp.D, stat = stat)
+  ## extract the index in which either p is less than the p-value threshold or fold change
+  ## is higher than the fold change threshold
+  ##(5.1) creat an ampty list that will store the filtered data
+  n_index <- length(levels(peaklist_new$group))
+  exp_list <- vector("list", length = n_index)
+  names(exp_list) <- levels(peaklist_new$group)
+
+  ##(5.2) data filtering
+  for (i in 1 : n_index){
+   group_name = levels(peaklist_new$group)[i]
+   # subset data according to group
+   data_p = as.data.frame(stat[, grepl(group_name, colnames(stat))])
+   data_f = as.data.frame(fold[,grepl(paste(group_name, "_", sep = ""), colnames(fold))])
+   index_p <-  which(apply(data_p < p, 1, all) == TRUE) # get p index
+   index_f <- which(apply(data_f >= folds, 1, all) == TRUE) # get fold index
+   index <- sort(unique(c(index_p, index_f)))
+   ## first filter with p value and fold change
+   peak_filter1 <- peak[index, ]
+   ## second filter with detected peak number, and select specific columns
+   exp_list[[i]] <- peak_filter1[peak_filter1[group_name] > 0,][, c("mz", "rt", paste("mean_", group_name, sep = ""))]
+   colnames(exp_list[[i]]) <- c("mz", "rt", "intensity")
   }
+
+  ##(5.3) refilter the unlabeled group
+  exp_list[[unlabel]] <- peak[peak[unlabel] > 0, ][, c("mz", "rt", paste("mean_", unlabel, sep = ""))]
+  colnames(exp_list[[unlabel]]) <- c("mz", "rt", "intensity")
+  exp_list$stat <- stat
+  exp_list$fold <- fold
   cat("done");
   return(exp_list)
 }
+
