@@ -14,7 +14,6 @@
 
 getp <- function(dat){
   ##(1) format the data
-  dat$group <- factor(dat$group , levels = c("D", "C", "B"))
   colnames(dat)[-ncol(dat)] <- paste("V", names(dat)[-ncol(dat)], sep = "")
   ##(2) aov
   response_names <- names(dat)[-ncol(dat)]
@@ -48,8 +47,13 @@ getp <- function(dat){
     result[[i]] <- TukeyHSD(aov_hack)$group[, 4]
   }
   ##(4) output
-  output <- data.frame(matrix(unlist(result), ncol = 3, byrow = TRUE))
-  colnames(output) <- c("p_CD", "p_BD", "p_CB")
+  col_num <- as.numeric(summary(result)[1])
+  #list_names <- names(result[[1]])
+  output <- data.frame(matrix(unlist(result), ncol = col_num, byrow = TRUE))
+  #colnames(output) <- list_names
+  f <- as.factor(dat$group)
+  j <- combn(levels(f), 2)
+  colnames(output) <- paste(j[1,], "-", j[2,], sep = '')
   output
 }
 
