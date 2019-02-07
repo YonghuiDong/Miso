@@ -4,15 +4,13 @@
 \alias{fold}
 \title{fold change}
 \usage{
-fold(x, f)
+fold(x)
 }
 \arguments{
-\item{x}{matrix data, type: matrix}
-
-\item{f}{groups}
+\item{x}{dataframe}
 }
 \value{
-a dataframe with fold changes
+a dataframe with mean values and fold changes
 }
 \description{
 calculate fold change among different samples.
@@ -22,7 +20,8 @@ vars <- 1000
 samples <- 50
 groups <- 3
 dat <- replicate(vars, runif(n = samples))
-f <- rep_len(1:groups, samples) + 1
+f <- rep_len(1:groups, samples)
 f <- LETTERS[f]
-ret <- fold(dat, f)
+dat <- data.frame(dat, group = f)
+ret <- fold(dat)
 }

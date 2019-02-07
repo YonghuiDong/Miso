@@ -4,27 +4,29 @@
 \alias{prefilter}
 \title{Prefilter}
 \usage{
-prefilter(peak, cutint = 0, nsam = 2, minsam = 1)
+prefilter(xset, subgroup = NULL, unlabel = NULL, reps = TRUE,
+  p = 0.05, folds = 10)
 }
 \arguments{
-\item{peak}{xcms processed dataset.}
+\item{xset}{xcms object.}
 
-\item{cutint}{cutoff intensity. Ion intensity below the cutoff value will be considered as noise, default value 0.}
+\item{subgroup}{subset the xcms groups. The name should be the same as in phboData$class. default = NULL, which means no subset will be performed.}
 
-\item{nsam}{number of samples in each experiment, default value 2. If the sample numbers are different in each
-gorup, a vector can be used to input the number of samples in each group, i.e. nsam = c(0, 2, 2, 3, 3).}
+\item{unlabel}{specify which is unlabeled group.}
 
-\item{minsam}{minimum number of samples.The peak is considered valid only when it is at least detected in
-the minimum number of samples in a group, default value 1.  A vector can be used to To control the minsam in each
-group, i.e. nsam = c(1, 1, 2, 2, 1).}
+\item{reps}{if there are replicates in the sample.}
+
+\item{p}{p-value threshold, default value = 0.05}
+
+\item{folds}{fold change threshold, default value = 10}
 }
 \value{
-a filtered peaklist.
+a filtered peaklist
 }
 \description{
 prefiltering isotopically labeled analytes according to the experiment design.
 }
 \examples{
 data(lcms)
-explist <- prefilter(lcms[1:100, ])
+explist <- prefilter(lcms, subgroup = c("B", "C", "D"), unlabel = "B")
 }

@@ -4,12 +4,10 @@
 \alias{Rresult}
 \title{Reduced result list}
 \usage{
-Rresult(full_Result, cutint = 0)
+Rresult(full_Result)
 }
 \arguments{
 \item{full_Result}{full result list}
-
-\item{cutint}{cutoff intensity.Rows that any ion intensities below the cutoff value will removed}
 }
 \value{
 csv file with repeated results being removed
@@ -18,14 +16,5 @@ csv file with repeated results being removed
 export reduced isotope labeled result list
 }
 \examples{
-data(lcms)
-explist <- prefilter(lcms[1: 100, ]) # use a subset of lcms data as example
-exp.B <- explist$exp.B
-exp.C <- explist$exp.C
-exp.D <- explist$exp.D
-iso.C <- diso(iso1 = 'H2', n11 = 4, n12 = 3, exp.base = exp.B, exp.iso = exp.C)
-iso.D <- diso(iso1 = 'C13', n11 = 9, n12 = 6, iso2 = 'N15', n21 = 1, n22 = 0,
-exp.base = iso.C[,1:3], exp.iso = exp.D)
-full_Result <- Fresult(iso.C, iso.D)
-reduced_Result <- Rresult(full_Result)
+a = 1+1
 }
