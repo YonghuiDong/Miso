@@ -6,7 +6,7 @@
 #' @param reps if there are replicates in the sample.
 #' @param p p-value threshold, default value = 0.05
 #' @param folds fold change threshold, default value = 10
-#' @import xcms
+#' @importFrom xcms peakTable
 #' @importFrom stats lm
 #' @importFrom stats aov
 #' @importFrom stats TukeyHSD
