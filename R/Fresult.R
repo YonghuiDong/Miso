@@ -17,7 +17,10 @@
 #' full_result <- Fresult(iso.C, iso.D)
 
 Fresult <- function(x, ...) {
+  ## merge result
   p <- Reduce(function(x, y) merge(x, y, by = c("B.mz", "B.rt", "B.intensity")), list(x, ...))
   p <- p[!duplicated(p), ]
+  rt_inx <- grepl("rt", colnames(p))
+  p[rt_inx] <- round(p[rt_inx]/60, digits=2)
   return(p)
 }
