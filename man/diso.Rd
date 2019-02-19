@@ -5,7 +5,7 @@
 \title{Isotope filtering}
 \usage{
 diso(iso1, n11, n12, iso2 = "NO", n21 = 0, n22 = 0, exp.base,
-  exp.iso, ppm = 10, rt.dif = 6)
+  exp.iso, ppm = 10, rt.dif = 6, poly = 1)
 }
 \arguments{
 \item{iso1}{the first labled atom in precusor ion.}
@@ -27,6 +27,8 @@ diso(iso1, n11, n12, iso2 = "NO", n21 = 0, n22 = 0, exp.base,
 \item{ppm}{m/z tolarance, default value 30.}
 
 \item{rt.dif}{retention time tolarance, default value 6 seconds.}
+
+\item{poly}{polymer of the feeding precursor derived metabolites, e.g. dimer poly = 2, trimer poly =3, default value 1.}
 }
 \value{
 results containing unlabled and their corresponding labled analytes, with RT and labeling information.

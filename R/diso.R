@@ -10,6 +10,7 @@
 #' @param exp.iso isotope labeled group.
 #' @param ppm m/z tolarance, default value 30.
 #' @param rt.dif retention time tolarance, default value 6 seconds.
+#' @param poly polymer of the feeding precursor derived metabolites, e.g. dimer poly = 2, trimer poly =3, default value 1.
 #' @return results containing unlabled and their corresponding labled analytes, with RT and labeling information.
 #' @export
 #' @examples
@@ -23,7 +24,7 @@
 #' exp.base = iso.C[,1:3], exp.iso = exp.D)
 
 diso <- function(iso1, n11, n12, iso2 = 'NO', n21 = 0, n22 = 0, exp.base,
-                     exp.iso, ppm = 10, rt.dif = 6) {
+                     exp.iso, ppm = 10, rt.dif = 6, poly = 1) {
   # check the input variables
   cat("\n(1) Checking input parameters...");
   element <- isoDB$element
@@ -35,12 +36,14 @@ diso <- function(iso1, n11, n12, iso2 = 'NO', n21 = 0, n22 = 0, exp.base,
   if(!is.numeric(n22)) {stop('n22 is not numeric')}
   if (n11 < n12) {stop('The argument "n11" must be no less than "n12"' )}
   if (n21 < n22) {stop('The argument "n21" must be no less than "n22"' )}
+  if (poly <= 0) {stop('poly should be >= 1')}
+  if (poly %% 1 != 0) {stop('poly should be integer')}
   cat("done");
 
   cat("\n(2) Preparing datacube...");
   # prepare the labelling pattern according to the feeding precusor. iso2 is 0 by default.
-  pattern1 <- seq(n11, n12, by = -1)
-  pattern2 <- seq(n21, n22, by = -1)
+  pattern1 <- seq(n11, n12, by = -1) * poly
+  pattern2 <- seq(n21, n22, by = -1) * poly
   mass_dif1 <- isoDB$mass_dif[match(iso1, isoDB$element)]
   mass_dif2 <- isoDB$mass_dif[match(iso2, isoDB$element)]
   iso.pattern1 <- mass_dif1 * pattern1
