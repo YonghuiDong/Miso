@@ -7,6 +7,7 @@
 #' @param p p-value threshold, default value = 0.05
 #' @param folds fold change threshold, default value = 10
 #' @importFrom xcms peakTable
+#' @importFrom CAMERA annotate getPeaklist
 #' @importFrom stats lm
 #' @importFrom stats aov
 #' @importFrom stats TukeyHSD
@@ -18,7 +19,6 @@
 
 prefilter <- function(xset, subgroup = NULL, unlabel = NULL,  reps = TRUE, p = 0.05, folds = 10){
 
-  peakTable <- NULL
   ##(1) check input
   cat("\n(1) Checking input parameters...");
   ## check object type
@@ -40,9 +40,12 @@ prefilter <- function(xset, subgroup = NULL, unlabel = NULL,  reps = TRUE, p = 0
   cat("done");
 
   ##(2) prepare new peaklist
-  ## (2.1) subset peak
-  ## get peaktable
   peak <- peakTable(xset)
+  ##(2.1) deisotoping
+  anI <- annotate(xset, ppm = 10, multiplier = 2, quick = TRUE, calcIso = TRUE)
+  iso_peaklist <- getPeaklist(anI)
+  iso_peaklist$isotopes <- sub("\\[.*?\\]", "", iso_peaklist$isotopes)
+  peak <- peak[iso_peaklist$isotopes == '' | iso_peaklist$isotopes == '[M]+', ]
   ## the first 7 rows are always the same in any aligned xcms peak table
   A = peak[, c(-1:-(7 + length(pheno_levels)))]
   B = t(A)
