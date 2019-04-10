@@ -2,11 +2,12 @@
 #' @description plot unlabled and labeled Isotopologues from filtering result
 #' @param dat isotope filtering result
 #' @param rinx row index
-#' @import ggplot2
+#' @importFrom ggplot2 ggplot aes geom_linerange xlab ylab scale_y_continuous theme_bw ggtitle
 #' @importFrom plotly ggplotly
 #' @return interactive plot
 #' @export
 #' @examples
+#'\dontrun{
 #' data(lcms)
 #' explist <- prefilter(lcms, subgroup = c("B", "C", "D"), unlabel = "B")
 #' exp.B <- explist$B
@@ -17,10 +18,11 @@
 #' exp.base = iso.C[,1:3], exp.iso = exp.D)
 #' full_result <- Fresult(iso.C, iso.D)
 #' isoplot(full_result, 1)
+#'}
 
 isoplot <- function(dat, rinx) {
   ##(1) check input
-  mz <- int <- NULL
+  mz <- int <- aes <- NULL
   if(rinx <=0 | rinx > dim(dat)[1])
   {stop(paste('your result index should between 1 and', dim(dat)[1]))}
 
@@ -32,7 +34,7 @@ isoplot <- function(dat, rinx) {
   dat2 <- cbind.data.frame(mz, int)
 
   ##(3) plot
-  p <- ggplot(dat2, aes(x = mz, ymax = int, ymin = 0)) +
+  p <- ggplot(dat2, ggplot2::aes(x = mz, ymax = int, ymin = 0)) +
     geom_linerange(size = 0.6) +
     xlab("m/z") +
     ylab("Intensity") +
